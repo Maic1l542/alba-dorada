@@ -1,0 +1,32 @@
+name: Compilar mod
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: alba-dorada-mod-v0.2
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.1.1
+
+      - name: Compilar
+        run: gradle build --no-daemon
+
+      - name: Guardar el mod compilado
+        uses: actions/upload-artifact@v4
+        with:
+          name: albadorada-mod
+          path: alba-dorada-mod-v0.2/build/libs/*.jar
